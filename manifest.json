@@ -1,0 +1,16 @@
+{
+    "manifest_version": 2,
+    "name": "LoL Stream List",
+    "version": "0.1",
+    "description": "League of legends streams",
+    "permissions":["https://api.twitch.tv/"],
+    "browser_action":{
+        "default_title": "LoL Stream List",
+        "default_icon": "icon.png",
+        "default_popup": "popup.html"
+    },
+    "content_security_policy": "script-src 'self' https://ajax.googleapis.com; object-src 'self'",
+    "icons": {
+           "48": "icon48.png",
+          "128": "icon128.png" }
+}
