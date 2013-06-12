@@ -7,7 +7,9 @@ function view(curl){
 function refresh(){
 	$.getJSON(twitch, function(data){
 		for (var i = 0; i < data.streams.length; i++) {
-			var d = "<tr class='pic'><td class='td-pic'><a href='"+data.streams[i].channel.url+
+			var d = "<tr class='pic tooltip' title='"+
+			data.streams[i].channel.status+
+			"'><td class='td-pic'><a href='"+data.streams[i].channel.url+
 			"'><img src='"+data.streams[i].preview.small+"'/></a></td>"+
 			"<td><span class='camera'>"+data.streams[i].channel.name+
 			"</span><br>"+
