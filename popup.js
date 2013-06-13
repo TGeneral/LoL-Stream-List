@@ -11,11 +11,10 @@ function show(filter){
 		imgbox.className = "td-pic";
 		var link = document.createElement('a');
 		link.href = streams[i].url;
-		var img = document.createElement('img');
-		img.src = streams[i].image
-		link.appendChild(img);
+		var img = document.createElement('div');
+		img.style.backgroundImage = "url("+streams[i].image+")";
 		imgbox.appendChild(link);
-		
+		link.appendChild(img);
 		var detailbox = document.createElement('td');
 		var name = document.createElement('span');
 		name.className = "camera";
