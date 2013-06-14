@@ -18,6 +18,17 @@
 				text-align: center;
 				box-shadow: 0px 1px 5px gray;
 			}
+			#search{
+				border-radius: 10px;
+				outline: none;
+				border-style: solid;
+				border-width: 1px;
+				border-color: #ddd;
+				-webkit-appearance: none;
+			}
+			#search:focus{
+				box-shadow: 0px 0px 5px #0174DF;
+			}
 			#panel{
 				margin-top: 2px;
 				height: 100%;
@@ -37,7 +48,7 @@
 				width: 85px;
 				height: 60px;
 			}
-			.td-pic img, .td-pic div{
+			.td-pic div{
 				width: 80px;
 				height: 50px;
 				border-radius: 3px;
@@ -92,14 +103,15 @@
 
 			::-webkit-scrollbar-thumb:horizontal:hover{
 			    background: -webkit-linear-gradient(top, #FAFAFA, #F2F2F2);
-			}
-																																																
+			}												
 		</style>
 		<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 		<script type="text/javascript" src="popup.js"></script>
 	</head>
 	<body class="loading">
-		<div id="ban">LoL Stream List</div>
+		<div id="ban">LoL Stream List<br>
+			<input id="search" type="search" results=5 autosave="true" placeholder="search">
+		</div>
 		<div id="panel"><table id="list" cellspacing=0></table></div>
 	</body>
 </html>

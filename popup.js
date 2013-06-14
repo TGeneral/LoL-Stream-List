@@ -2,7 +2,15 @@ var twitch = "https://api.twitch.tv/kraken/streams?game=League+of+Legends&limit=
 var streams = [];
 
 function show(filter){
+	$('#list').empty();
+	var tmp;
 	for (var i = 0; i < streams.length; i++) {
+		if (filter.length != 0){
+			tmp = (streams[i].tooltip+streams[i].name).toLowerCase();
+			if (tmp.search(filter.toLowerCase()) == -1) 
+				continue;
+		}
+		
 		var row = document.createElement('tr');
 		row.className = "pic tooltip";
 		row.title = streams[i].tooltip;
@@ -13,8 +21,9 @@ function show(filter){
 		link.href = streams[i].url;
 		var img = document.createElement('div');
 		img.style.backgroundImage = "url("+streams[i].image+")";
-		imgbox.appendChild(link);
 		link.appendChild(img);
+		imgbox.appendChild(link);
+		
 		var detailbox = document.createElement('td');
 		var name = document.createElement('span');
 		name.className = "camera";
@@ -30,6 +39,11 @@ function show(filter){
 		row.appendChild(detailbox);
 		$('#list').append(row);
 	};
+	//empty row
+	var row = document.createElement('tr');
+	row.appendChild(document.createElement('td'));
+	row.appendChild(document.createElement('td'));
+	$('#list').append(row);
 }
 
 function refresh(){
@@ -56,4 +70,7 @@ function refresh(){
 
 $(document).ready(function(){
 	refresh();
+	$('#search').keyup(function(){
+		show($(this).val());
+	});
 })
