@@ -1,7 +1,11 @@
-var twitch = "https://api.twitch.tv/kraken/streams?game=League+of+Legends&limit=50";
-var streams = [];
+var twitch = "https://api.twitch.tv/kraken/streams?game=League+of+Legends&limit=50",
+	streams = [],
+	template = "<tr class='pic tooltip' title='{{}}'>"+
+				"<td class='td-pic'><a href='{{}}' /><div style='backgroundImage: url({{}})'></div></td>"+
+				"<td><span class='camera'>{{}}</span><br><span class='viewer'>{{}}</span>"+
+				"</tr>";
 
-function show(filter){
+function render(filter){
 	$('#list').empty();
 	var tmp;
 	for (var i = 0; i < streams.length; i++) {
@@ -34,9 +38,19 @@ function show(filter){
 		detailbox.appendChild(name);
 		detailbox.appendChild(document.createElement('br'));
 		detailbox.appendChild(viewers);
+
+		var bookmarkbox = document.createElement('td');
+		var star = document.createElement('div');
+		star.className = "bookmark";
+		$(star).data('streamId',streams[i]);
+		if(streams[i].bookmarked)
+			star.className += ' selected';
+		bookmarkbox.appendChild(star);
+
 		
 		row.appendChild(imgbox);
 		row.appendChild(detailbox);
+		row.appendChild(bookmarkbox);
 		$('#list').append(row);
 	};
 	//empty row
@@ -47,30 +61,68 @@ function show(filter){
 }
 
 function refresh(){
+	var store = JSON.parse(localStorage['bookmark']);
+	console.log(store);
 	$.getJSON(twitch, function(data){
 		streams = [];
 		for (var i = 0; i < data.streams.length; i++) {
-			streams.push({
+			var stream = {
+				type: 'twitch',
 				tooltip: data.streams[i].channel.status,
 				image: data.streams[i].preview.small,
 				url: data.streams[i].channel.url,
 				name: data.streams[i].channel.name,
-				viewers: data.streams[i].viewers
+				viewers: data.streams[i].viewers,
+				bookmarked: false
+			};
+
+			var searchResult = $.grep(store, function(item) {
+				return item.type == stream.type && item.name == stream.name;
 			});
+			
+			if(searchResult.length == 0)
+				streams.push(stream);
+			else{
+				stream.bookmarked = true;
+				streams.unshift(stream);
+			}
 		};
-		show('');
-		$('a').click(function(){
-			chrome.tabs.create({url: $(this).attr('href')});
-			return false;
-		});
+		render('');
+		$('a').click(openStream);
+		$('.bookmark').click(bookmark);
 		$('.loading').removeClass('loading');
 	});
 }
 
+function openStream(){
+	chrome.tabs.create({url: $(this).attr('href')});
+	return false;
+}
+
+function bookmark() {
+	var streamId = $(this).data('streamId'),
+		store = JSON.parse(localStorage['bookmark']);
+	if ($(this).hasClass('selected')) {
+		$(this).removeClass('selected');
+		store = $.grep(store, function(item) {
+			return item.type == streamId.type && item.name != streamId.name;
+		});
+	}else{
+		$(this).addClass('selected');
+		store.push(streamId);
+	}
+	localStorage['bookmark'] = JSON.stringify(store);
+}
+
+function prepareStorage(){
+	if(!localStorage['bookmark'])
+		localStorage['bookmark'] = JSON.stringify([]);
+}
 
 $(document).ready(function(){
-	refresh();
+	prepareStorage();
+	refresh(); 
 	$('#search').keyup(function(){
-		show($(this).val());
+		render($(this).val());
 	});
 })
