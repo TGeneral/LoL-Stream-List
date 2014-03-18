@@ -1,4 +1,4 @@
-var twitch = "https://api.twitch.tv/kraken/streams?game=League+of+Legends&limit=50",
+var twitch = "https://api.twitch.tv/kraken/streams?game=League+of+Legends&limit=500",
 	streams = [],
 	template = "<tr class='pic tooltip' title='{{}}'>"+
 				"<td class='td-pic'><a href='{{}}' /><div style='backgroundImage: url({{}})'></div></td>"+
@@ -63,6 +63,7 @@ function render(filter){
 function refresh(){
 	var store = JSON.parse(localStorage['bookmark']);
 	console.log(store);
+	$('body').addClass('loading');
 	$.getJSON(twitch, function(data){
 		streams = [];
 		for (var i = 0; i < data.streams.length; i++) {
@@ -125,4 +126,5 @@ $(document).ready(function(){
 	$('#search').keyup(function(){
 		render($(this).val());
 	});
+	$('#refresh').click(refresh);
 })

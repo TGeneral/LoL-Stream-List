@@ -1,11 +1,11 @@
 {
     "manifest_version": 2,
-    "name": "LoL Stream List",
-    "version": "0.3",
-    "description": "League of legends streams",
+    "name": "LoL Stream List (Stream browser)",
+    "version": "0.4",
+    "description": "League of legends stream browser",
     "permissions":["https://api.twitch.tv/"],
     "browser_action":{
-        "default_title": "LoL Stream List",
+        "default_title": "LoL Stream List (Stream browser)",
         "default_icon": "icon.png",
         "default_popup": "popup.html"
     },
